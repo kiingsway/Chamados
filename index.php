@@ -55,6 +55,8 @@
 				if ($fez == 1) echo "<td>Sim</td>";
 				if ($fez == 0) echo "<td>Não</td>";
 				echo "<td class='hoverable'>
+				<a class='btn-floating btn-large waves-effect waves-light red btn-small tooltipped hide' data-tooltip='Salvar'>
+				<i class='material-icons'>check</i></a>
 				<a class='btn-floating btn-large waves-effect waves-light red btn-small tooltipped' data-tooltip='Editar'>
 				<i class='material-icons'>edit</i></a>
 				<a class='btn-floating btn-large waves-effect waves-light red btn-small tooltipped'  data-tooltip='Mandar e-mail'>
