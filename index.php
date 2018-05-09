@@ -66,10 +66,19 @@
 						$result = mysqli_query($db, $query);
 						while ($chamados = mysqli_fetch_assoc($result)) {
 							echo "<tr class='hoverable'>";
-							echo "<td>".$chamados['ticket']."</td>";
+							echo "<td class='inner'>".$chamados['ticket']."</td>";
 							echo "<td>".$chamados['acao']."</td>";
 							echo "<td>".$chamados['pessoa']."</td>";
-							echo "<td>".$chamados['prazo']."</td>";
+
+							echo "<td> <select class='browser-default'>
+							<option value='1'>Em análise</option>
+							<option value='2'>Prazo</option>
+							<option value='3'>Cobrar</option>
+							<option value='3'>Encerrar</option>
+							</select>
+							</td>";
+
+							//echo "<td>".$chamados['prazo']."</td>";
 							echo "<td>".$chamados['obs']."</td>";
 							$fez = $chamados['fez'];
 							if ($fez == 1) echo "<td><button type='submit' name='btnFez' value=".$chamados['ticket']." class='btn btn-sm btn-outline-success waves-effect'><i class='fa fa-check' aria-hidden='true'></i></button></td>";
@@ -86,7 +95,12 @@
 		</div>
 	</div>
 
-	
+	<select class="mdb-select">
+    <option value="" disabled selected>Choose your option</option>
+    <option value="1">Option 1</option>
+    <option value="2">Option 2</option>
+    <option value="3">Option 3</option>
+</select>
 	<!-- JQuery -->
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<!-- Bootstrap tooltips -->
@@ -95,6 +109,29 @@
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js"></script>
 	<!-- MDB core JavaScript -->
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.0/js/mdb.min.js"></script>
+
+	<script>
+		/*$(function () {
+			$(".inner, .inner2").dblclick(function (e) {
+				e.stopPropagation();
+				var currentEle = $(this);
+				var value = $(this).html();
+				updateVal(currentEle, value);
+			});
+		});
+		function updateVal(currentEle, value) {
+			$(currentEle).html('<input class="thVal" type="text" value="' + value + '" />');
+			$(".thVal").focus();
+			$(".thVal").keyup(function (event) {
+				if (event.keyCode == 13) {
+					$(currentEle).html($(".thVal").val().trim());
+				}
+		});
+			$(document).click(function () {
+				$(currentEle).html($(".thVal").val().trim());
+			});
+		}*/
+	</script>
             
 </body>
 </html>
