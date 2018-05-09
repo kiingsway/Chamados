@@ -1,3 +1,4 @@
+<?php include ('edit.php');?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -42,39 +43,46 @@
 
 	<div class="container-fluid">
 		<div class="table-responsive">
-			<table class="table">
-				<tr>
-					<th>Ticket</th>
-					<th>Ação</th>
-					<th>Pessoa</th>
-					<th>Prazo</th>
-					<th>Detalhes</th>
-					<th>Fez</th>
-					<th>Opções</th>
-				</tr>
-				<?php 
-				$query = "SELECT * FROM tbchamados";
-				$result = mysqli_query($db, $query);
-				while ($chamados = mysqli_fetch_assoc($result)) {
-					echo "<tr class='hoverable'>";
-					echo "<td>".$chamados['ticket']."</td>";
-					echo "<td>".$chamados['acao']."</td>";
-					echo "<td>".$chamados['pessoa']."</td>";
-					echo "<td>".$chamados['prazo']."</td>";
-					echo "<td>".$chamados['obs']."</td>";
-					$fez = $chamados['fez'];
-					if ($fez == 1) echo "<td>Sim</td>";
-					if ($fez == 0) echo "<td>Não</td>";
-					echo "<td class='hoverable'>
-					<a class='btn btn-primary btn-sm active waves-light' mdbWavesEffect role='button'><i class='fa fa-check-square-o' aria-hidden='true'></i></a>
-					<a class='btn btn-primary btn-sm active waves-light' mdbWavesEffect role='button'><i class='fa fa-edit' aria-hidden='true'></i></a>
-					<a class='btn btn-primary btn-sm active waves-light' mdbWavesEffect role='button'><i class='fa fa-envelope-o' aria-hidden='true'></i></a>
-					</td>";
-					echo "</tr>";
-				}
-				?>
-
-			</table>
+			<form method="POST" action="#">
+				<table class="table">
+					<tr>
+						<th>Ticket</th>
+						<th>Ação</th>
+						<th>Pessoa</th>
+						<th>Prazo</th>
+						<th>Detalhes</th>
+						<?php
+						$query = "SELECT fez FROM tbchamados LIMIT 1";
+						$result = mysqli_query($db, $query);
+						while ($chamados = mysqli_fetch_assoc($result)) {
+							$fez = $chamados['fez'];
+							if ($fez == '0') echo "<th><button type='submit' name='btnTodosFez' class='btn btn-sm btn-outline-success waves-effect'>Fez?</button></th>";
+							else echo "<td><button type='submit' name='btnTodosFez' class='btn btn-sm btn-outline-danger waves-effect'>Fez?</button></td>";
+						}?>
+						<th>Opções</th>
+					</tr>
+						<?php 
+						$query = "SELECT * FROM tbchamados";
+						$result = mysqli_query($db, $query);
+						while ($chamados = mysqli_fetch_assoc($result)) {
+							echo "<tr class='hoverable'>";
+							echo "<td>".$chamados['ticket']."</td>";
+							echo "<td>".$chamados['acao']."</td>";
+							echo "<td>".$chamados['pessoa']."</td>";
+							echo "<td>".$chamados['prazo']."</td>";
+							echo "<td>".$chamados['obs']."</td>";
+							$fez = $chamados['fez'];
+							if ($fez == 1) echo "<td><button type='submit' name='btnFez' value=".$chamados['ticket']." class='btn btn-sm btn-outline-success waves-effect'><i class='fa fa-check' aria-hidden='true'></i></button></td>";
+							if ($fez == 0) echo "<td><button type='submit' name='btnFez' value=".$chamados['ticket']." class='btn btn-sm btn-outline-danger waves-effect'><i class='fa fa-close' aria-hidden='true'></i></button></td>";
+							echo "<td class='hoverable'>
+							<button type='button' class='btn btn-sm btn-blue'><i class='fa fa-check-square-o' aria-hidden='true'></i></button>
+							<button type='button' class='btn btn-sm btn-blue'><i class='fa fa-envelope-o' aria-hidden='true'></i></button>
+							</td>";
+							echo "</tr>";
+						}
+						?>
+				</table>
+			</form>
 		</div>
 	</div>
 
