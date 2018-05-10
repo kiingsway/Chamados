@@ -17,6 +17,6 @@ if (isset($_POST['btnTodosFez'])) {
 	if ($user['fez'] == '0') $fez ='1';
 	else $fez = '0';
 	$query = "UPDATE tbchamados	SET fez = '".$fez."';";
-	//$query = "UPDATE tbchamados	SET fez = '".$fez."' WHERE ticket = '".$_POST['btnTodosFez']."';";
+	$query = "UPDATE tbchamados	SET fez = '".$fez."' WHERE ticket = '".$_POST['btnTodosFez']."';";
 	mysqli_query($db, $query) or die('Erro: '.mysqli_error($db));
 }

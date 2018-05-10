@@ -67,9 +67,6 @@
 						while ($chamados = mysqli_fetch_assoc($result)) {
 							echo "<tr class='hoverable'>";
 							echo "<td class='inner'>".$chamados['ticket']."</td>";
-							echo "<td>".$chamados['acao']."</td>";
-							echo "<td>".$chamados['pessoa']."</td>";
-
 							echo "<td> <select class='browser-default'>
 							<option value='1'>Em análise</option>
 							<option value='2'>Prazo</option>
@@ -77,6 +74,18 @@
 							<option value='3'>Encerrar</option>
 							</select>
 							</td>";
+
+							echo "<td> <select class='browser-default'>";
+							$query1 = "SELECT nome FROM tbusers";
+							$result1 = mysqli_query($db, $query1);
+							while ($users = mysqli_fetch_assoc($result1))
+							{
+								if ($chamados['nome'] == $users['pessoa']) echo "<option selected>".$users['nome']."</option>";
+								else echo "<option>".$users['nome']."</option>";
+							}
+							echo "</select></td>";
+
+							echo '<td><input type="date" value="'.$chamados['prazo'].'"></td>';
 
 							//echo "<td>".$chamados['prazo']."</td>";
 							echo "<td>".$chamados['obs']."</td>";
@@ -95,12 +104,6 @@
 		</div>
 	</div>
 
-	<select class="mdb-select">
-    <option value="" disabled selected>Choose your option</option>
-    <option value="1">Option 1</option>
-    <option value="2">Option 2</option>
-    <option value="3">Option 3</option>
-</select>
 	<!-- JQuery -->
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<!-- Bootstrap tooltips -->
@@ -109,6 +112,8 @@
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js"></script>
 	<!-- MDB core JavaScript -->
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.0/js/mdb.min.js"></script>
+
+	<script>$('.datepicker').pickadate();</script>
 
 	<script>
 		/*$(function () {
