@@ -96,7 +96,7 @@
 							echo "<td class='hoverable'>
 							<button type='button' class='btn btn-sm btn-blue' data-toggle='tooltip' data-placement='top' title='Salvar'><i class='fa fa-check-square-o' aria-hidden='true'></i></button>
 							<button type='button' class='btn btn-sm btn-blue' data-toggle='tooltip' data-placement='top' title='Mandar e-mail'><i class='fa fa-envelope-o' aria-hidden='true'></i></button>
-							<button type='button' class='btn btn-sm btn-blue' data-toggle='tooltip' data-placement='top' title='Apagar'><i class='fa fa-trash' aria-hidden='true'></i></button>
+							<button type='submit' class='btn btn-sm btn-blue' data-toggle='tooltip' data-placement='top' title='Apagar' value='".$chamados['ticket']."' name='btnApagar'><i class='fa fa-trash' aria-hidden='true'></i></button>
 							</td>";
 							echo "</tr>";
 						}
