@@ -28,12 +28,12 @@
 	<!--Main Navigation-->
 	<header>
 	    <nav class="navbar fixed-top navbar-expand-lg navbar-dark pink scrolling-navbar">
-	        <a class="navbar-brand" href="#"><strong>Chamados</strong></a>
+	        <a class="navbar-brand" href="#"><strong>Chamados   </strong><span class="badge badge-pill light-blue"><?php echo $chamados['Total']; } ?> </span></a>
 	        <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
 	            <ul class="nav navbar-nav nav-flex-icons ml-auto">
 	                <li class="nav-item">
-	                    <a class="nav-link">Total: <?php echo $chamados['Total']; } ?> </a>
+	                    <a href="email.php"><span class="badge badge-pill green"><i class="fa fa-envelope-o fa-2x"></i></span></a>
 	                </li>
 	            </ul>
 	        </div>
@@ -95,7 +95,6 @@
 							if ($fez == 0) echo "<td><button type='submit' name='btnFez' value=".$chamados['ticket']." class='btn btn-sm btn-outline-danger waves-effect' data-toggle='tooltip' data-placement='top' title='Não'><i class='fa fa-close' aria-hidden='true'></i></button></td>";
 							echo "<td class='hoverable'>
 							<button type='button' class='btn btn-sm btn-blue' data-toggle='tooltip' data-placement='top' title='Salvar'><i class='fa fa-check-square-o' aria-hidden='true'></i></button>
-							<button type='button' class='btn btn-sm btn-blue' data-toggle='tooltip' data-placement='top' title='Mandar e-mail'><i class='fa fa-envelope-o' aria-hidden='true'></i></button>
 							<button type='submit' class='btn btn-sm btn-blue' data-toggle='tooltip' data-placement='top' title='Apagar' value='".$chamados['ticket']."' name='btnApagar'><i class='fa fa-trash' aria-hidden='true'></i></button>
 							</td>";
 							echo "</tr>";
