@@ -66,35 +66,37 @@
 						$result = mysqli_query($db, $query);
 						while ($chamados = mysqli_fetch_assoc($result)) {
 							echo "<tr class='hoverable'>";
-							echo "<td class='inner'>".$chamados['ticket']."</td>";
+							echo "<td class='inner'><b>".$chamados['ticket']."</b></td>";
+
 							echo "<td> <select class='browser-default'>
-							<option value='1'>Em análise</option>
-							<option value='2'>Prazo</option>
-							<option value='3'>Cobrar</option>
-							<option value='3'>Encerrar</option>
+							<option value='3'".(($chamados['acao'] == 'Em analise') ? "selected": "") ." >Em análise</option>
+							<option value='3'".(($chamados['acao'] == 'Prazo') ? "selected": "") ." >Prazo</option>
+							<option value='3'".(($chamados['acao'] == 'Cobrar') ? "selected": "") ." >Cobrar</option>
+							<option value='3'".(($chamados['acao'] == 'Encerrar') ? "selected": "") ." >Encerrar</option>
 							</select>
 							</td>";
 
 							echo "<td> <select class='browser-default'>";
+							echo "<option></option>";
 							$query1 = "SELECT nome FROM tbusers";
 							$result1 = mysqli_query($db, $query1);
 							while ($users = mysqli_fetch_assoc($result1))
 							{
-								if ($chamados['nome'] == $users['pessoa']) echo "<option selected>".$users['nome']."</option>";
+								if ($chamados['pessoa'] == $users['nome']) echo "<option selected>".$users['nome']."</option>";
 								else echo "<option>".$users['nome']."</option>";
 							}
 							echo "</select></td>";
 
 							echo '<td><input type="date" value="'.$chamados['prazo'].'"></td>';
 
-							//echo "<td>".$chamados['prazo']."</td>";
 							echo "<td>".$chamados['obs']."</td>";
 							$fez = $chamados['fez'];
-							if ($fez == 1) echo "<td><button type='submit' name='btnFez' value=".$chamados['ticket']." class='btn btn-sm btn-outline-success waves-effect'><i class='fa fa-check' aria-hidden='true'></i></button></td>";
-							if ($fez == 0) echo "<td><button type='submit' name='btnFez' value=".$chamados['ticket']." class='btn btn-sm btn-outline-danger waves-effect'><i class='fa fa-close' aria-hidden='true'></i></button></td>";
+							if ($fez == 1) echo "<td><button type='submit' name='btnFez' value=".$chamados['ticket']." class='btn btn-sm btn-outline-success waves-effect' data-toggle='tooltip' data-placement='top' title='Sim'><i class='fa fa-check' aria-hidden='true'></i></button></td>";
+							if ($fez == 0) echo "<td><button type='submit' name='btnFez' value=".$chamados['ticket']." class='btn btn-sm btn-outline-danger waves-effect' data-toggle='tooltip' data-placement='top' title='Não'><i class='fa fa-close' aria-hidden='true'></i></button></td>";
 							echo "<td class='hoverable'>
-							<button type='button' class='btn btn-sm btn-blue'><i class='fa fa-check-square-o' aria-hidden='true'></i></button>
-							<button type='button' class='btn btn-sm btn-blue'><i class='fa fa-envelope-o' aria-hidden='true'></i></button>
+							<button type='button' class='btn btn-sm btn-blue' data-toggle='tooltip' data-placement='top' title='Salvar'><i class='fa fa-check-square-o' aria-hidden='true'></i></button>
+							<button type='button' class='btn btn-sm btn-blue' data-toggle='tooltip' data-placement='top' title='Mandar e-mail'><i class='fa fa-envelope-o' aria-hidden='true'></i></button>
+							<button type='button' class='btn btn-sm btn-blue' data-toggle='tooltip' data-placement='top' title='Apagar'><i class='fa fa-trash' aria-hidden='true'></i></button>
 							</td>";
 							echo "</tr>";
 						}
@@ -116,26 +118,9 @@
 	<script>$('.datepicker').pickadate();</script>
 
 	<script>
-		/*$(function () {
-			$(".inner, .inner2").dblclick(function (e) {
-				e.stopPropagation();
-				var currentEle = $(this);
-				var value = $(this).html();
-				updateVal(currentEle, value);
-			});
-		});
-		function updateVal(currentEle, value) {
-			$(currentEle).html('<input class="thVal" type="text" value="' + value + '" />');
-			$(".thVal").focus();
-			$(".thVal").keyup(function (event) {
-				if (event.keyCode == 13) {
-					$(currentEle).html($(".thVal").val().trim());
-				}
-		});
-			$(document).click(function () {
-				$(currentEle).html($(".thVal").val().trim());
-			});
-		}*/
+		// Tooltips Initialization
+		$(function () {
+		$('[data-toggle="tooltip"]').tooltip()});
 	</script>
             
 </body>
