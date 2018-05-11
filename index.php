@@ -7,6 +7,7 @@
 	<!-- Ícones Material Design Google -->
 	<!-- Font Awesome -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="tobia.css">
 	<!-- Bootstrap core CSS -->
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
 	<!-- Material Design Bootstrap -->
@@ -56,8 +57,8 @@
 						$result = mysqli_query($db, $query);
 						while ($chamados = mysqli_fetch_assoc($result)) {
 							$fez = $chamados['fez'];
-							if ($fez == '0') echo "<th><button type='submit' name='btnTodosFez' class='btn btn-sm btn-outline-success waves-effect'>Fez?</button></th>";
-							else echo "<td><button type='submit' name='btnTodosFez' class='btn btn-sm btn-outline-danger waves-effect'>Fez?</button></td>";
+							if ($fez == '0') echo "<th><button data-toggle='modal' data-target='#modalLoading' type='submit' name='btnTodosFez' class='btn btn-sm btn-outline-success waves-effect'>Fez?</button></th>";
+							else echo "<td><button data-toggle='modal' data-target='#modalLoading' type='submit' name='btnTodosFez' class='btn btn-sm btn-outline-danger waves-effect'>Fez?</button></td>";
 						}?>
 						<th>Opções</th>
 					</tr>
@@ -90,12 +91,14 @@
 							echo '<td><input type="date" value="'.$chamados['prazo'].'"></td>';
 
 							echo "<td>".$chamados['obs']."</td>";
+
 							$fez = $chamados['fez'];
-							if ($fez == 1) echo "<td><button type='submit' name='btnFez' value=".$chamados['ticket']." class='btn btn-sm btn-outline-success waves-effect' data-toggle='tooltip' data-placement='top' title='Sim'><i class='fa fa-check' aria-hidden='true'></i></button></td>";
-							if ($fez == 0) echo "<td><button type='submit' name='btnFez' value=".$chamados['ticket']." class='btn btn-sm btn-outline-danger waves-effect' data-toggle='tooltip' data-placement='top' title='Não'><i class='fa fa-close' aria-hidden='true'></i></button></td>";
+							if ($fez == 1) echo "<td><button data-toggle='modal' data-target='#modalLoading' type='submit' name='btnFez' value=".$chamados['ticket']." class='btn btn-sm btn-outline-success waves-effect' data-toggle='tooltip' data-placement='top' title='Sim'><i class='fa fa-check' aria-hidden='true'></i></button></td>";
+							if ($fez == 0) echo "<td><button data-toggle='modal' data-target='#modalLoading' type='submit' name='btnFez' value=".$chamados['ticket']." class='btn btn-sm btn-outline-danger waves-effect' data-toggle='tooltip' data-placement='top' title='Não'><i class='fa fa-close' aria-hidden='true'></i></button></td>";
+
 							echo "<td class='hoverable'>
 							<button type='button' class='btn btn-sm btn-blue' data-toggle='tooltip' data-placement='top' title='Salvar'><i class='fa fa-check-square-o' aria-hidden='true'></i></button>
-							<button type='submit' class='btn btn-sm btn-blue' data-toggle='tooltip' data-placement='top' title='Apagar' value='".$chamados['ticket']."' name='btnApagar'><i class='fa fa-trash' aria-hidden='true'></i></button>
+							<button type='submit' data-toggle='modal' data-target='#modalLoading' class='btn btn-sm btn-blue' data-toggle='tooltip' data-placement='top' title='Apagar' value='".$chamados['ticket']."' name='btnApagar'><i class='fa fa-trash' aria-hidden='true'></i></button>
 							</td>";
 							echo "</tr>";
 						}
@@ -104,6 +107,34 @@
 			</form>
 		</div>
 	</div>
+
+	<!--Modal: modalPush-->
+	<div class="modal" id="modalLoading" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	    <div class="modal-dialog modal-notify modal-info" role="document">
+	        <!--Content-->
+	        <div class="modal-content text-center">
+
+	            <!--Body-->
+	            <div class="modal-body">
+
+	                <div class="sk-cube-grid">
+					  <div class="sk-cube sk-cube1"></div>
+					  <div class="sk-cube sk-cube2"></div>
+					  <div class="sk-cube sk-cube3"></div>
+					  <div class="sk-cube sk-cube4"></div>
+					  <div class="sk-cube sk-cube5"></div>
+					  <div class="sk-cube sk-cube6"></div>
+					  <div class="sk-cube sk-cube7"></div>
+					  <div class="sk-cube sk-cube8"></div>
+					  <div class="sk-cube sk-cube9"></div>
+					</div>
+	                <p>Aplicando alterações...</p>
+	            </div>
+	        </div>
+	        <!--/.Content-->
+	    </div>
+	</div>
+	<!--Modal: modalPush-->
 
 	<!-- JQuery -->
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -121,6 +152,11 @@
 		$(function () {
 		$('[data-toggle="tooltip"]').tooltip()});
 	</script>
-            
+
+	<!-- MDBoostrap -->
+	<!-- http://tobiasahlin.com/spinkit/ -->
+
+
+
 </body>
 </html>
