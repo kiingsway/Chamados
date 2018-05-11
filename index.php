@@ -98,7 +98,7 @@
 
 							echo "<td class='hoverable'>
 							<button type='button' class='btn btn-sm btn-blue' data-toggle='tooltip' data-placement='top' title='Salvar'><i class='fa fa-check-square-o' aria-hidden='true'></i></button>
-							<button type='submit' data-toggle='modal' data-target='#modalLoading' class='btn btn-sm btn-blue' data-toggle='tooltip' data-placement='top' title='Apagar' value='".$chamados['ticket']."' name='btnApagar'><i class='fa fa-trash' aria-hidden='true'></i></button>
+							<button type='button' class='btn btn-sm btn-blue' data-toggle='modal' data-target='#modalConfirmDelete'><i class='fa fa-trash' aria-hidden='true'></i></button>
 							</td>";
 							echo "</tr>";
 						}
@@ -135,6 +135,42 @@
 	    </div>
 	</div>
 	<!--Modal: modalPush-->
+
+
+
+	<!-- Button trigger modal-->
+	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalConfirmDelete">Launch modal</button>
+
+	<!--Modal: modalConfirmDelete-->
+	<div class="modal fade" id="modalConfirmDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+            <!--Content-->
+            <div class="modal-content text-center">
+                <!--Header-->
+                <div class="modal-header d-flex justify-content-center">
+                    <p class="heading">Are you sure?</p>
+                </div>
+
+                <!--Body-->
+                <div class="modal-body">
+
+                    <i class="fa fa-times fa-4x animated rotateIn"></i>
+
+                </div>
+                <form method="POST" action="#">
+                <!--Footer-->
+                <div class="modal-footer flex-center">
+                	<button type='submit' class='btn btn-sm btn-blue' data-toggle='tooltip' data-placement='top' title='Apagar' value=<?php echo "'".$chamados['ticket']."'"; } ?> name='btnApagar'><i class='fa fa-trash' aria-hidden='true'></i></button>
+                    <a href="#" class="btn  btn-outline-danger">Yes</a>
+                    <a type="button" class="btn  btn-danger waves-effect" data-dismiss="modal">No</a>
+                </div>
+                </form>
+            </div>
+            <!--/.Content-->
+        </div>
+    </div>
+    <!--Modal: modalConfirmDelete-->
+                        
 
 	<!-- JQuery -->
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
