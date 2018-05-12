@@ -93,7 +93,7 @@
 							}
 							echo "</select></td>";
 							
-							echo '<td><input type="text" id="data" class="form-control" value="'.$prazo.'"></td>';
+							echo '<td><input type="text" class="form-control" value="'.$prazo.'"></td>';
 
 							echo "<td>".$chamados['obs']."</td>";
 
@@ -198,7 +198,7 @@
 		const buttons = document.querySelectorAll('.deletar');
 		buttons.forEach(button => button.addEventListener('click', deletar, false));
 
-		$('#data').datepicker({
+		$('.form-control').datepicker({
 		    format: "dd/mm/yyyy",
 		    language: "pt-BR",
 		    daysOfWeekDisabled: "0,6"
