@@ -66,14 +66,15 @@
 						$query = "SELECT * FROM tbchamados";
 						$result = mysqli_query($db, $query);
 						while ($chamados = mysqli_fetch_assoc($result)) {
+							$ticket = $chamados['ticket'];
 							echo "<tr class='hoverable'>";
-							echo "<td class='inner'><b>".$chamados['ticket']."</b></td>";
+							echo "<td class='inner'><b>".$ticket."</b></td>";
 
 							echo "<td> <select class='browser-default'>
-							<option value='3'".(($chamados['acao'] == 'Em analise') ? "selected": "") ." >Em análise</option>
-							<option value='3'".(($chamados['acao'] == 'Prazo') ? "selected": "") ." >Prazo</option>
+							<option value='1'".(($chamados['acao'] == 'Em analise') ? "selected": "") ." >Em análise</option>
+							<option value='2'".(($chamados['acao'] == 'Prazo') ? "selected": "") ." >Prazo</option>
 							<option value='3'".(($chamados['acao'] == 'Cobrar') ? "selected": "") ." >Cobrar</option>
-							<option value='3'".(($chamados['acao'] == 'Encerrar') ? "selected": "") ." >Encerrar</option>
+							<option value='4'".(($chamados['acao'] == 'Encerrar') ? "selected": "") ." >Encerrar</option>
 							</select>
 							</td>";
 
@@ -93,12 +94,12 @@
 							echo "<td>".$chamados['obs']."</td>";
 
 							$fez = $chamados['fez'];
-							if ($fez == 1) echo "<td><button data-toggle='modal' data-target='#modalLoading' type='submit' name='btnFez' value=".$chamados['ticket']." class='btn btn-sm btn-outline-success waves-effect' data-toggle='tooltip' data-placement='top' title='Sim'><i class='fa fa-check' aria-hidden='true'></i></button></td>";
-							if ($fez == 0) echo "<td><button data-toggle='modal' data-target='#modalLoading' type='submit' name='btnFez' value=".$chamados['ticket']." class='btn btn-sm btn-outline-danger waves-effect' data-toggle='tooltip' data-placement='top' title='Não'><i class='fa fa-close' aria-hidden='true'></i></button></td>";
+							if ($fez == 1) echo "<td><button data-toggle='modal' data-target='#modalLoading' type='submit' name='btnFez' value=".$ticket." class='btn btn-sm btn-outline-success waves-effect' data-toggle='tooltip' data-placement='top' title='Sim'><i class='fa fa-check' aria-hidden='true'></i></button></td>";
+							if ($fez == 0) echo "<td><button data-toggle='modal' data-target='#modalLoading' type='submit' name='btnFez' value=".$ticket." class='btn btn-sm btn-outline-danger waves-effect' data-toggle='tooltip' data-placement='top' title='Não'><i class='fa fa-close' aria-hidden='true'></i></button></td>";
 
 							echo "<td class='hoverable'>
 							<button type='button' class='btn btn-sm btn-blue' data-toggle='tooltip' data-placement='top' title='Salvar'><i class='fa fa-check-square-o' aria-hidden='true'></i></button>
-							<button type='button' class='btn btn-sm btn-blue' data-toggle='modal' data-target='#modalConfirmDelete'><i class='fa fa-trash' aria-hidden='true'></i></button>
+							<button type='button' id='btnModalApagar' class='btn btn-sm btn-blue deletar' data-toggle='modal' data-target='#modalConfirmDelete' data-value=".$ticket."><i class='fa fa-trash' aria-hidden='true'></i></button>
 							</td>";
 							echo "</tr>";
 						}
@@ -136,11 +137,6 @@
 	</div>
 	<!--Modal: modalPush-->
 
-
-
-	<!-- Button trigger modal-->
-	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalConfirmDelete">Launch modal</button>
-
 	<!--Modal: modalConfirmDelete-->
 	<div class="modal fade" id="modalConfirmDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
@@ -148,7 +144,7 @@
             <div class="modal-content text-center">
                 <!--Header-->
                 <div class="modal-header d-flex justify-content-center">
-                    <p class="heading">Are you sure?</p>
+                    <p class="heading" id="modalTitulo"></p>
                 </div>
 
                 <!--Body-->
@@ -160,9 +156,8 @@
                 <form method="POST" action="#">
                 <!--Footer-->
                 <div class="modal-footer flex-center">
-                	<button type='submit' class='btn btn-sm btn-blue' data-toggle='tooltip' data-placement='top' title='Apagar' value=<?php echo "'".$chamados['ticket']."'"; } ?> name='btnApagar'><i class='fa fa-trash' aria-hidden='true'></i></button>
-                    <a href="#" class="btn  btn-outline-danger">Yes</a>
-                    <a type="button" class="btn  btn-danger waves-effect" data-dismiss="modal">No</a>
+                	<button type='submit' class="btn btn-outline-danger" id="btnApagar" name="btnApagar" data-toggle='modal' data-target='#modalLoading'>Sim</button>
+                    <a type="button" class="btn  btn-danger waves-effect" data-dismiss="modal">Não</a>
                 </div>
                 </form>
             </div>
@@ -181,12 +176,21 @@
 	<!-- MDB core JavaScript -->
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.0/js/mdb.min.js"></script>
 
-	<script>$('.datepicker').pickadate();</script>
-
 	<script>
 		// Tooltips Initialization
 		$(function () {
 		$('[data-toggle="tooltip"]').tooltip()});
+
+
+		function deletar() {
+		  var id = this.dataset.value;
+		  document.getElementById("modalTitulo").innerHTML = "Certeza que deseja apagar o ticket " + id + "?";
+		  document.getElementById("btnApagar").value = id;
+		}
+
+		const buttons = document.querySelectorAll('.deletar');
+		buttons.forEach(button => button.addEventListener('click', deletar, false));
+
 	</script>
 
 	<!-- MDBoostrap -->
