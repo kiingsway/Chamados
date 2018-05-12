@@ -1,15 +1,16 @@
 <?php include ('edit.php');?>
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
 	<title>Chamados</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<!-- Ícones Material Design Google -->
 	<!-- Font Awesome -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="tobia.css">
+	<link rel="stylesheet" href="css/tobia.css">
+	<link rel="stylesheet" href="css/bootstrap-datepicker.css">
 	<!-- Bootstrap core CSS -->
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 	<!-- Material Design Bootstrap -->
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.0/css/mdb.min.css" rel="stylesheet">
 	<!-- Deixe o browser saber que esse site serve em mobile -->
@@ -67,10 +68,13 @@
 						$result = mysqli_query($db, $query);
 						while ($chamados = mysqli_fetch_assoc($result)) {
 							$ticket = $chamados['ticket'];
+							$prazo = "";
+							if (isset($chamados['prazo'])) $prazo = date_format(date_create($chamados['prazo']), 'd/m/Y');
+
 							echo "<tr class='hoverable'>";
 							echo "<td class='inner'><b>".$ticket."</b></td>";
 
-							echo "<td> <select class='browser-default'>
+							echo "<td> <select class='custom-select'>
 							<option value='1'".(($chamados['acao'] == 'Em analise') ? "selected": "") ." >Em análise</option>
 							<option value='2'".(($chamados['acao'] == 'Prazo') ? "selected": "") ." >Prazo</option>
 							<option value='3'".(($chamados['acao'] == 'Cobrar') ? "selected": "") ." >Cobrar</option>
@@ -78,7 +82,7 @@
 							</select>
 							</td>";
 
-							echo "<td> <select class='browser-default'>";
+							echo "<td> <select class='custom-select'>";
 							echo "<option></option>";
 							$query1 = "SELECT nome FROM tbusers";
 							$result1 = mysqli_query($db, $query1);
@@ -88,8 +92,8 @@
 								else echo "<option>".$users['nome']."</option>";
 							}
 							echo "</select></td>";
-
-							echo '<td><input type="date" value="'.$chamados['prazo'].'"></td>';
+							
+							echo '<td><input type="text" id="data" class="form-control" value="'.$prazo.'"></td>';
 
 							echo "<td>".$chamados['obs']."</td>";
 
@@ -171,8 +175,11 @@
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<!-- Bootstrap tooltips -->
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.13.0/umd/popper.min.js"></script>
-	<!-- Bootstrap core JavaScript -->
+	<!-- Bootstrap core DatePicker -->
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<!-- Bootstrap core JavaScript -->
+	<script src="js/bootstrap-datepicker.min.js"></script>
+	<script src="js/bootstrap-datepicker.pt-BR.min.js"></script>
 	<!-- MDB core JavaScript -->
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.0/js/mdb.min.js"></script>
 
@@ -191,10 +198,17 @@
 		const buttons = document.querySelectorAll('.deletar');
 		buttons.forEach(button => button.addEventListener('click', deletar, false));
 
+		$('#data').datepicker({
+		    format: "dd/mm/yyyy",
+		    language: "pt-BR",
+		    daysOfWeekDisabled: "0,6"
+		});
+
 	</script>
 
 	<!-- MDBoostrap -->
 	<!-- http://tobiasahlin.com/spinkit/ -->
+	<!-- Bootstrap Datepicker: https://github.com/uxsolutions/bootstrap-datepicker -->
 
 
 
