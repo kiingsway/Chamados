@@ -69,32 +69,14 @@
 						while ($chamados = mysqli_fetch_assoc($result)) {
 							$ticket = $chamados['ticket'];
 							$prazo = "";
-							if (isset($chamados['prazo'])) $prazo = date_format(date_create($chamados['prazo']), 'd/m/Y');
+							if (isset($chamados['prazo'])) $prazo = date_format(date_create($chamados['prazo']), 'd/m');
 
 							echo "<tr class='hoverable'>";
-							echo "<td class='inner'><b>".$ticket."</b></td>";
 
-							echo "<td> <select class='custom-select'>
-							<option value='1'".(($chamados['acao'] == 'Em analise') ? "selected": "") ." >Em análise</option>
-							<option value='2'".(($chamados['acao'] == 'Prazo') ? "selected": "") ." >Prazo</option>
-							<option value='3'".(($chamados['acao'] == 'Cobrar') ? "selected": "") ." >Cobrar</option>
-							<option value='4'".(($chamados['acao'] == 'Encerrar') ? "selected": "") ." >Encerrar</option>
-							</select>
-							</td>";
-
-							echo "<td> <select class='custom-select'>";
-							echo "<option></option>";
-							$query1 = "SELECT nome FROM tbusers";
-							$result1 = mysqli_query($db, $query1);
-							while ($users = mysqli_fetch_assoc($result1))
-							{
-								if ($chamados['pessoa'] == $users['nome']) echo "<option selected>".$users['nome']."</option>";
-								else echo "<option>".$users['nome']."</option>";
-							}
-							echo "</select></td>";
-							
-							echo '<td><input type="text" class="form-control" value="'.$prazo.'"></td>';
-
+							echo "<td><b>".$ticket."</b></td>";
+							echo "<td><b>".$chamados['acao']."</b></td>";
+							echo "<td><b>".$chamados['pessoa']."</b></td>";
+							echo "<td><b>".$prazo."</b></td>";
 							echo "<td>".$chamados['obs']."</td>";
 
 							$fez = $chamados['fez'];
@@ -102,8 +84,8 @@
 							if ($fez == 0) echo "<td><button data-toggle='modal' data-target='#modalLoading' type='submit' name='btnFez' value=".$ticket." class='btn btn-sm btn-outline-danger waves-effect' data-toggle='tooltip' data-placement='top' title='Não'><i class='fa fa-close' aria-hidden='true'></i></button></td>";
 
 							echo "<td class='hoverable'>
-							<button type='button' class='btn btn-sm btn-blue' data-toggle='tooltip' data-placement='top' title='Salvar'><i class='fa fa-check-square-o' aria-hidden='true'></i></button>
-							<button type='button' id='btnModalApagar' class='btn btn-sm btn-blue deletar' data-toggle='modal' data-target='#modalConfirmDelete' data-value=".$ticket."><i class='fa fa-trash' aria-hidden='true'></i></button>
+							<button type='button' class='btn btn-sm btn-blue alterar' data-toggle='modal' data-target='#modalAteracoes' data-value=".$ticket."><i class='fa fa-pencil' aria-hidden='true'></i></button>
+							<button type='button' class='btn btn-sm btn-blue deletar' data-toggle='modal' data-target='#modalConfirmDelete' data-value=".$ticket."><i class='fa fa-trash' aria-hidden='true'></i></button>
 							</td>";
 							echo "</tr>";
 						}
@@ -148,7 +130,7 @@
             <div class="modal-content text-center">
                 <!--Header-->
                 <div class="modal-header d-flex justify-content-center">
-                    <p class="heading" id="modalTitulo"></p>
+                    <p class="heading" id="modalTituloDeletar"></p>
                 </div>
 
                 <!--Body-->
@@ -160,7 +142,7 @@
                 <form method="POST" action="#">
                 <!--Footer-->
                 <div class="modal-footer flex-center">
-                	<button type='submit' class="btn btn-outline-danger" id="btnApagar" name="btnApagar" data-toggle='modal' data-target='#modalLoading'>Sim</button>
+                	<button type='submit' class="btn btn-outline-danger" name="btnApagar" id="btnApagar">Sim</button>
                     <a type="button" class="btn  btn-danger waves-effect" data-dismiss="modal">Não</a>
                 </div>
                 </form>
@@ -171,38 +153,101 @@
     <!--Modal: modalConfirmDelete-->
 
 
-
-
-<!-- Button trigger modal-->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAteracoes">Launch modal</button>
-
 <!--Modal: modalAteracoes-->
-<div class="modal fade" id="modalAteracoes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalAteracoes1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-notify modal-info" role="document">
             <!--Content-->
             <div class="modal-content text-center">
                 <!--Header-->
                 <div class="modal-header d-flex justify-content-center">
-                    <p class="heading">Are you sure?</p>
+                    <p class="heading" id="modalTituloAlterar1"></p>
                 </div>
 
                 <!--Body-->
                 <div class="modal-body">
 
-                    <i class="fa fa-times fa-4x animated rotateIn"></i>
+                    <i class="fa fa-pencil fa-4x animated rotateIn"></i>
 
                 </div>
 
                 <!--Footer-->
                 <div class="modal-footer flex-center">
-                    <a href="https://mdbootstrap.com/product/material-design-for-bootstrap-pro/" class="btn  btn-outline-info">Yes</a>
-                    <a type="button" class="btn  btn-info waves-effect" data-dismiss="modal">No</a>
+                	<button type='submit' class="btn btn-outline-info" name="btnAlterar" id="btnAlterar">Sim</button>
+                    <a type="button" class="btn  btn-info waves-effect" data-dismiss="modal">Não</a>
                 </div>
             </div>
             <!--/.Content-->
         </div>
     </div>
     <!--Modal: modalAteracoes-->
+
+
+<!-- Modal: modalPoll -->
+<div class="modal fade right" id="modalAteracoes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+    <div class="modal-content">
+      <!--Header-->
+      <div class="modal-header">
+        <p class="heading" id="modalTituloAlterar"></p>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="white-text">×</span>
+        </button>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+        <div class="text-center">
+          <i class="fa fa-pencil fa-4x mb-3 animated rotateIn"></i>
+        </div>
+
+        <hr>
+        <p>Ação:</p>
+        <select class='custom-select'>
+        	<option>Em análise</option>
+        	<option>Prazo</option>
+        	<option>Cobrar</option>
+        	<option>Encerrar</option>
+        </select>
+
+        <p>Pessoa:</p>
+        <?php
+        echo "<select class='custom-select'>";
+		echo "<option></option>";
+		$query1 = "SELECT nome FROM tbusers";
+		$result1 = mysqli_query($db, $query1);
+		while ($users = mysqli_fetch_assoc($result1))
+		{
+			if ($chamados['pessoa'] == $users['nome']) echo "<option selected>".$users['nome']."</option>";
+			else echo "<option>".$users['nome']."</option>";
+		}
+		echo "</select>";
+
+		echo '<p>Prazo:</p>';
+		echo '<input type="text" class="form-control data" value="'.$prazo.'">';
+
+		echo '<p>OBS:</p>';
+		echo '<div class="md-form">
+		<input type="text" id="form1" class="form-control">
+		</div>'
+
+		?>
+
+
+
+
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer justify-content-center">
+        <a type="button" class="btn btn-primary waves-effect waves-light">Salvar<i class="fa fa-check ml-1"></i></a>
+        <a type="button" class="btn btn-outline-primary waves-effect" data-dismiss="modal">Cancelar</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal: modalPoll -->
+                        
                         
                         
 
@@ -223,21 +268,38 @@
 		$(function () {
 		$('[data-toggle="tooltip"]').tooltip()});
 
-
+		// Função para deletar registro
 		function deletar() {
-		  var id = this.dataset.value;
-		  document.getElementById("modalTitulo").innerHTML = "Certeza que deseja apagar o ticket " + id + "?";
-		  document.getElementById("btnApagar").value = id;
+		  var idDel = this.dataset.value;
+		  document.getElementById("modalTituloDeletar").innerHTML = "Certeza que deseja apagar o ticket " + idDel + "?";
+		  document.getElementById("btnApagar").value = idDel;
 		}
 
-		const buttons = document.querySelectorAll('.deletar');
-		buttons.forEach(button => button.addEventListener('click', deletar, false));
+		const buttonsDeletar = document.querySelectorAll('.deletar');
+		buttonsDeletar.forEach(button => button.addEventListener('click', deletar, false));
 
-		$('.form-control').datepicker({
+		// Função para alterar registro
+		function alterar() {
+		  var id = this.dataset.value;
+		  document.getElementById("modalTituloAlterar").innerHTML = "Fazendo alterações no ticket " + id;
+		  document.getElementById("btnAlterar").value = id;
+		}
+
+		const buttonsAlterar = document.querySelectorAll('.alterar');
+		buttonsAlterar.forEach(button => button.addEventListener('click', alterar, false));
+
+		// Datepicker
+		$('.data').datepicker({
 		    format: "dd/mm/yyyy",
 		    language: "pt-BR",
 		    daysOfWeekDisabled: "0,6"
 		});
+
+
+		// Select on change
+		/*$('.custom-select').change(function(){
+		   alert('a');
+		}*/
 
 	</script>
 
