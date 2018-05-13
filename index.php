@@ -11,6 +11,7 @@
 	<link rel="stylesheet" href="css/bootstrap-datepicker.css">
 	<!-- Bootstrap core CSS -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css">
 	<!-- Material Design Bootstrap -->
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.0/css/mdb.min.css" rel="stylesheet">
 	<!-- Deixe o browser saber que esse site serve em mobile -->
@@ -31,6 +32,7 @@
 	<header>
 	    <nav class="navbar fixed-top navbar-expand-lg navbar-dark pink scrolling-navbar">
 	        <a class="navbar-brand" href="#"><strong>Chamados   </strong><span class="badge badge-pill light-blue"><?php echo $chamados['Total']; } ?> </span></a>
+	        <button class='btn btn-sm btn-green alterar'><span class="badge badge-pill green">Aplicar alterações <i class="fa fa-check fa-1x"></i></span></button>
 	        <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
 	            <ul class="nav navbar-nav nav-flex-icons ml-auto">
@@ -43,10 +45,11 @@
 	</header><br><br><br>
 	<!--Main Navigation-->
 
-	<div class="container-fluid">
+	<div class="container">
 		<div class="table-responsive">
 			<form method="POST" action="#">
-				<table class="table">
+				<table id="example" class="table table-striped table-bordered" style="width:100%;">
+					<thead>
 					<tr>
 						<th>Ticket</th>
 						<th>Ação</th>
@@ -63,33 +66,54 @@
 						}?>
 						<th>Opções</th>
 					</tr>
+				</thead>
+				<tbody>
 						<?php 
 						$query = "SELECT * FROM tbchamados";
 						$result = mysqli_query($db, $query);
 						while ($chamados = mysqli_fetch_assoc($result)) {
 							$ticket = $chamados['ticket'];
 							$prazo = "";
-							if (isset($chamados['prazo'])) $prazo = date_format(date_create($chamados['prazo']), 'd/m');
+							if (isset($chamados['prazo'])) $prazo = date_format(date_create($chamados['prazo']), 'd/m/Y');
 
 							echo "<tr class='hoverable'>";
 
 							echo "<td><b>".$ticket."</b></td>";
-							echo "<td><b>".$chamados['acao']."</b></td>";
-							echo "<td><b>".$chamados['pessoa']."</b></td>";
-							echo "<td><b>".$prazo."</b></td>";
+							
+							echo "<td> <select class='custom-select'>
+							<option value='1'".(($chamados['acao'] == 'Em analise') ? "selected": "") ." >Em análise</option>
+							<option value='2'".(($chamados['acao'] == 'Prazo') ? "selected": "") ." >Prazo</option>
+							<option value='3'".(($chamados['acao'] == 'Cobrar') ? "selected": "") ." >Cobrar</option>
+							<option value='4'".(($chamados['acao'] == 'Encerrar') ? "selected": "") ." >Encerrar</option>
+							</select>
+							</td>";
+
+							echo "<td> <select class='custom-select'>";
+							echo "<option></option>";
+							$query1 = "SELECT nome FROM tbusers";
+							$result1 = mysqli_query($db, $query1);
+							while ($users = mysqli_fetch_assoc($result1))
+							{
+								if ($chamados['pessoa'] == $users['nome']) echo "<option selected>".$users['nome']."</option>";
+								else echo "<option>".$users['nome']."</option>";
+							}
+							echo "</select></td>";
+
+							echo '<td width="13%"><input type="text" class="form-control data" value="'.$prazo.'"></td>';
+
 							echo "<td>".$chamados['obs']."</td>";
 
 							$fez = $chamados['fez'];
 							if ($fez == 1) echo "<td><button data-toggle='modal' data-target='#modalLoading' type='submit' name='btnFez' value=".$ticket." class='btn btn-sm btn-outline-success waves-effect' data-toggle='tooltip' data-placement='top' title='Sim'><i class='fa fa-check' aria-hidden='true'></i></button></td>";
 							if ($fez == 0) echo "<td><button data-toggle='modal' data-target='#modalLoading' type='submit' name='btnFez' value=".$ticket." class='btn btn-sm btn-outline-danger waves-effect' data-toggle='tooltip' data-placement='top' title='Não'><i class='fa fa-close' aria-hidden='true'></i></button></td>";
 
-							echo "<td class='hoverable'>
-							<button type='button' class='btn btn-sm btn-blue alterar' data-toggle='modal' data-target='#modalAteracoes' data-value=".$ticket."><i class='fa fa-pencil' aria-hidden='true'></i></button>
-							<button type='button' class='btn btn-sm btn-blue deletar' data-toggle='modal' data-target='#modalConfirmDelete' data-value=".$ticket."><i class='fa fa-trash' aria-hidden='true'></i></button>
-							</td>";
-							echo "</tr>";
+							echo "<td class='hoverable'>";
+							/* echo <button type='button' class='btn btn-sm btn-blue alterar' data-toggle='modal' data-target='#modalAteracoes' data-value=".$ticket."><i class='fa fa-pencil' aria-hidden='true'></i></button>";*/
+							echo "<button type='button' class='btn btn-sm btn-blue deletar' data-toggle='modal' data-target='#modalConfirmDelete' data-value=".$ticket."><i class='fa fa-trash' aria-hidden='true'></i></button>";
+							echo "</td></tr>";
 						}
 						?>
+						</tbody>
 				</table>
 			</form>
 		</div>
@@ -263,6 +287,25 @@
 	<!-- MDB core JavaScript -->
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.0/js/mdb.min.js"></script>
 
+	<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    var table = $('#example').DataTable();
+ 
+    $('.alterar').click( function() {
+        var data = table.$('input, select').serialize();
+        alert(
+            "The following data would have been submitted to the server: \n\n"+
+            data.substr( 0, 120 )+'...'
+        );
+        return false;
+    } );
+} );
+</script>
+
 	<script>
 		// Tooltips Initialization
 		$(function () {
@@ -279,14 +322,14 @@
 		buttonsDeletar.forEach(button => button.addEventListener('click', deletar, false));
 
 		// Função para alterar registro
-		function alterar() {
+		/*function alterar() {
 		  var id = this.dataset.value;
 		  document.getElementById("modalTituloAlterar").innerHTML = "Fazendo alterações no ticket " + id;
 		  document.getElementById("btnAlterar").value = id;
 		}
 
 		const buttonsAlterar = document.querySelectorAll('.alterar');
-		buttonsAlterar.forEach(button => button.addEventListener('click', alterar, false));
+		buttonsAlterar.forEach(button => button.addEventListener('click', alterar, false));*/
 
 		// Datepicker
 		$('.data').datepicker({
@@ -295,19 +338,11 @@
 		    daysOfWeekDisabled: "0,6"
 		});
 
-
-		// Select on change
-		/*$('.custom-select').change(function(){
-		   alert('a');
-		}*/
-
 	</script>
 
 	<!-- MDBoostrap -->
 	<!-- http://tobiasahlin.com/spinkit/ -->
 	<!-- Bootstrap Datepicker: https://github.com/uxsolutions/bootstrap-datepicker -->
-
-
 
 </body>
 </html>
