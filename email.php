@@ -42,81 +42,64 @@
 	<!--Main Navigation-->
 
 
-	<div class="container">
+	<div class="container-fluid">
+		<div class="card-group">
+			<?php
+				$query = "SELECT DISTINCT pessoa FROM tbchamados WHERE pessoa IS NOT NULL";
+				$result = mysqli_query($db, $query);
 
-<!-- Card deck -->
-<div class="card-deck">
-<!-- Card -->
-<div class="card">
-  <!-- Card content -->
-  <div class="card-body">
-    <!-- Title -->
-    <h4 class="card-title"><a>iTarget </a><span class="badge badge-pill rgba-red-strong">4</span></h4>
-    <!-- Text -->
-    <p class="card-text">45000: Prazo 08/08 vencido</p>
-    <p class="card-text">45000: Prazo 08/08 vencido</p>
-    <p class="card-text">45000: Prazo 08/08 vencido</p>
-    <p class="card-text">45000: Prazo 08/08 vencido</p>
-  </div>
-  <div class="rounded-bottom mdb-color lighten-3 text-center pt-3">
-    <ul class="list-unstyled list-inline font-small">
-      <li><a href="mailto:marcos.oranmiyan@cbr.org.br" class="btn btn-primary">Mandar e-mail</a></li>
-    </ul>
-  </div>
-</div>
-<!-- Card -->
-<!-- Card -->
-<div class="card">
-  <!-- Card content -->
-  <div class="card-body">
-    <!-- Title -->
-    <h4 class="card-title"><a>Marcos </a><span class="badge badge-pill rgba-yellow-strong">2</span></h4>
-    <!-- Text -->
-    <p class="card-text">45000</p>
-    <p class="card-text">45000</p>
-  </div>
-  <div class="rounded-bottom mdb-color lighten-3 text-center pt-3">
-    <ul class="list-unstyled list-inline font-small">
-      <li><a href="mailto:marcos.oranmiyan@cbr.org.br" class="btn btn-primary">Mandar e-mail</a></li>
-    </ul>
-  </div>
-</div>
-<!-- Card -->
-<!-- Card -->
-<div class="card">
-  <!-- Card content -->
-  <div class="card-body">
-    <!-- Title -->
-    <h4 class="card-title"><a>Lorem </a><span class="badge badge-pill rgba-green-strong">1</span></h4>
-    <!-- Text -->
-    <p class="card-text">45000</p>
-  </div>
-  <div class="rounded-bottom mdb-color lighten-3 text-center pt-3">
-    <ul class="list-unstyled list-inline font-small">
-      <li><a href="mailto:marcos.oranmiyan@cbr.org.br" class="btn btn-primary">Mandar e-mail</a></li>
-    </ul>
-  </div>
-</div>
-<!-- Card -->
+				$numbers = range(1, 8);
+				shuffle($numbers);
+				$i = 0;
+
+				while ($chamados = mysqli_fetch_assoc($result)) {
+
+					echo '<div class="card mb-4">';
+					echo '<div class="view overlay">';
+					echo '<img class="card-img-top" src="imgs/'.$numbers[$i].'.jpg">';
+					echo '<a href="#!"><div class="mask rgba-white-slight"></div></a>';
+					echo '</div>';
+					echo '<div class="card-body">';
+
+					$query3 = "SELECT COUNT(pessoa) AS Total FROM tbchamados WHERE pessoa = '".$chamados['pessoa']."'";
+					$result3 = mysqli_query($db, $query3);
+
+					$totalChamados = mysqli_fetch_assoc($result3)['Total'];
+
+					if ($totalChamados == 1) $cor = "green";
+					if ($totalChamados == 2 || $totalChamados == 3) $cor = "amber";
+					if ($totalChamados >= 4) $cor = "red";
+
+					echo '<h4 class="card-title"><a>'.$chamados['pessoa'].' </a><span class="badge badge-pill rgba-'.$cor.'-strong">'.$totalChamados.'</span></h4>';
+
+					$query2 = "SELECT ticket, obs FROM `tbchamados` WHERE pessoa = '".$chamados['pessoa']."'";
+					$result2 = mysqli_query($db, $query2);
+					while ($obs = mysqli_fetch_assoc($result2))
+					{
+						echo '<p class="card-text">';
+						echo $obs['ticket'] . ' ' . $obs['obs'];
+						echo '</p>';
+					}
+
+					$query4 = "SELECT email FROM tbusers WHERE nome = '".$chamados['pessoa']."'";
+					$result4 = mysqli_query($db, $query4);
+					$email = mysqli_fetch_assoc($result4)['email'];
+
+					echo '</div>';
+					echo '<div class="rounded-bottom mdb-color lighten-3 text-center pt-3">';
+				    echo '<ul class="list-unstyled list-inline font-small">';
+				    echo '<li><a href=mailto:"'.$email.'" class="btn btn-primary">Mandar e-mail</a></li>';
+					echo '</ul>';
+					echo '</div>';
+					echo '</div>';
+
+					$i++;
+				}
 
 
-
-</div>
-<!-- Card deck -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
+			?>
+		</div>
+	</div>
 
 	<!-- JQuery -->
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
